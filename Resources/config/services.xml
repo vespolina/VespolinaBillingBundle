@@ -4,17 +4,21 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="vespolina_billing.example.class">Vespolina\BillingBundle\Example</parameter>
+        <parameter key="vespolina_billing.manager.class">Vespolina\Billing\Manager\BillingManager</parameter>
+        <parameter key="vespolina_billing.model.billing_agreement.class">Vespolina\Entity\Billing\BillingAgreement</parameter>
+        <parameter key="vespolina_billing.model.billing_request.class">Vespolina\Entity\Billing\BillingRequest</parameter>
     </parameters>
 
     <services>
-        <service id="vespolina_billing.example" class="%vespolina_billing.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="vespolina_billing.billing_gateway" class="Vespolina\Billing\Gateway\BillingGateway">
+            <argument type="service" id="vespolina.molino" />
+            <argument>%vespolina_billing.model.billing.class%</argument>
+        </service>
+        <service id="vespolina_billing.billing_manager" class="%vespolina_billing.billing_manager.class%">
+            <argument type="service" id="vespolina_billing.billing_gateway" />
+            <argument key="billingAgreementClass">%vespolina_billing.model.billing_agreement.class%</argument>
+            <argument key="billingRequestClass">%vespolina_billing.model.billing_request.class%</argument>
         </service>
     </services>
-    -->
 </container>
