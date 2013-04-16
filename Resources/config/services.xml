@@ -1,24 +1,29 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="vespolina_billing.manager.class">Vespolina\Billing\Manager\BillingManager</parameter>
-        <parameter key="vespolina_billing.model.billing_agreement.class">Vespolina\Entity\Billing\BillingAgreement</parameter>
-        <parameter key="vespolina_billing.model.billing_request.class">Vespolina\Entity\Billing\BillingRequest</parameter>
+        <parameter key="vespolina_billing.billing_manager.class">Vespolina\Billing\Manager\BillingManager</parameter>
+        <parameter key="vespolina_billing.entity.billing_agreement.class">Vespolina\Entity\Billing\BillingAgreement</parameter>
+        <parameter key="vespolina_billing.entity.billing_request.class">Vespolina\Entity\Billing\BillingRequest</parameter>
+        <parameter key="vespolina_billing.default_billing_process.class">Vespolina\Billing\Process\DefaultBillingProcess</parameter>
     </parameters>
 
     <services>
         <service id="vespolina_billing.billing_gateway" class="Vespolina\Billing\Gateway\BillingGateway">
             <argument type="service" id="vespolina.molino" />
-            <argument>%vespolina_billing.model.billing.class%</argument>
         </service>
         <service id="vespolina_billing.billing_manager" class="%vespolina_billing.billing_manager.class%">
             <argument type="service" id="vespolina_billing.billing_gateway" />
-            <argument key="billingAgreementClass">%vespolina_billing.model.billing_agreement.class%</argument>
-            <argument key="billingRequestClass">%vespolina_billing.model.billing_request.class%</argument>
+            <argument type="collection">
+                <argument key="billingAgreementClass">%vespolina_billing.entity.billing_agreement.class%</argument>
+                <argument key="billingRequestClass">%vespolina_billing.entity.billing_request.class%</argument>
+                <argument key="defaultBillingProcessClass">%vespolina_billing.default_billing_process.class%</argument>
+            </argument>
+            <argument type="collection"> </argument>
+            <argument type="service" id="vespolina.event_dispatcher"/>
         </service>
     </services>
 </container>

@@ -13,7 +13,7 @@ class GenerateBillingRequestsCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('vespolina:billing:requests:generate')
+            ->setName('vespolina:billing:generate:requests')
             ->setDescription('Generate billing requests based on existing billing agreements.')
         ;
     }
@@ -25,9 +25,12 @@ class GenerateBillingRequestsCommand extends ContainerAwareCommand
         $pricingContext = new PricingContext();
         $pricingContext->set('endDate', new \DateTime());
 
+        //Todo: should use a proper pager for processing lot's of agreements
         $billingAgreements = $billingManager->findBillingAgreements($pricingContext);
 
         foreach ($billingAgreements as $billingAgreement) {
+
+            //Todo: One billing agreement could lead to several billing requests at the same time being created
             $billingRequest = $billingManager->generateBillingRequest($billingAgreement);
             $billingManager->updateBillingRequest($billingRequest);
 
